@@ -1,20 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+require('dotenv').config();
+
+
 const bodyParser = require('body-parser');
 const apiRoutes = require('./routes/api');
 const cors = require('cors');
 
-dotenv.config();
-connectDB();
+
+
 
 app.use(bodyParser.json());
 app.use('/api/v1', apiRoutes);
 app.use(cors());
 
-const DB_URL = 'mongodb+srv://thien5919:yZKb9NbH93ZzqgeR@cluster0.3bjq8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const DB_URL = process.env.MONGO_URI;
 mongoose.Promise = global.Promise;
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -28,7 +29,7 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
-
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log('Server is running on port 5000');
 });
